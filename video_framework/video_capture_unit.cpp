@@ -32,6 +32,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/videoio/videoio.hpp>
 
 namespace video_framework {
 
@@ -42,8 +43,8 @@ bool VideoCaptureUnit::OpenStreams(StreamSet* set) {
   }
 
   // Get capture properties.
-  frame_width_ = capture_->get(CV_CAP_PROP_FRAME_WIDTH) / options_.downscale;
-  frame_height_ = capture_->get(CV_CAP_PROP_FRAME_HEIGHT) / options_.downscale;
+  frame_width_ = capture_->get(cv::CAP_PROP_FRAME_WIDTH) / options_.downscale;
+  frame_height_ = capture_->get(cv::CAP_PROP_FRAME_HEIGHT) / options_.downscale;
 
   LOG(INFO) << "Capturing from Camera frames of size "
             << frame_width_ << "x" << frame_height_;

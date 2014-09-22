@@ -39,7 +39,7 @@
 # required cv components with header and library if COMPONENTS unspecified
 IF(NOT OpenCV_FIND_REQUIRED_COMPONENTS)
   # default
-  SET(OpenCV_FIND_REQUIRED_COMPONENTS core imgproc video highgui calib3d features2d)
+  SET(OpenCV_FIND_REQUIRED_COMPONENTS core imgproc video videoio highgui calib3d features2d)
 #  IF(WIN32)
 #    LIST(APPEND OpenCV_FIND_REQUIRED_COMPONENTS  CVCAM ) # WIN32 only actually
 #  ENDIF(WIN32)
@@ -59,7 +59,7 @@ SET(OpenCV_POSSIBLE_ROOT_DIRS
 	"/opt/local"
   )
 
-SET(COMPONENTS calib3d core contrib features2d flann gpu highgui imgproc legacy ml objdetect video)
+SET(COMPONENTS calib3d core contrib features2d flann gpu highgui imgproc legacy ml objdetect video videoio)
 
 #
 # select exactly ONE OpenCV base directory/tree

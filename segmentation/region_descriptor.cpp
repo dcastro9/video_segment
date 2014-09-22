@@ -70,7 +70,7 @@ AppearanceExtractor::AppearanceExtractor(
                                rgb_frame.cols,
                                CV_8UC3));
 
-  cv::cvtColor(rgb_frame, *lab_frame_, CV_BGR2Lab);
+  cv::cvtColor(rgb_frame, *lab_frame_, cv::COLOR_BGR2Lab);
 
   if (window_size > 0) {
     if (prev_extractor) {

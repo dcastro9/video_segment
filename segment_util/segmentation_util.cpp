@@ -34,6 +34,7 @@
 
 #include <boost/pending/disjoint_sets.hpp>
 #include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #ifdef _WIN32
 #undef min

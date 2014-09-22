@@ -189,7 +189,7 @@ bool DenseFlowUnit::OpenStreams(StreamSet* set) {
   flow_engine_.reset(new cv::Ptr<cv::DenseOpticalFlow>());
   *flow_engine_ = cv::createOptFlow_DualTVL1();
   (*flow_engine_)->set("warps", options_.num_warps);
-  (*flow_engine_)->set("iterations", options_.flow_iterations);
+  (*flow_engine_)->set("innerIterations", options_.flow_iterations);
 
   frame_number_ = 0;
 
@@ -325,7 +325,7 @@ void DenseFlowUnit::ProcessFrame(FrameSetPtr input, list<FrameSetPtr>* output) {
         }
       }
 
-      cv::cvtColor(hsv_image, rgb_image, CV_HSV2BGR);
+      cv::cvtColor(hsv_image, rgb_image, cv::COLOR_HSV2BGR);
       input->push_back(shared_ptr<VideoFrame>(vid_frame));
     }
   } else {

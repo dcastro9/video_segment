@@ -225,7 +225,7 @@ void VideoPipelineStats::ProcessFrame(FrameSetPtr input, list<FrameSetPtr>* outp
     cv::Point pt1(col - spacing / 3, row);
     cv::Point pt2(col + spacing / 3, image.rows - border);
     // Bar plot.
-    cv::rectangle(image, pt1, pt2, CV_RGB(0, 0, 200), -2);   // Neg. last arg for filled.
+    cv::rectangle(image, pt1, pt2, cv::Scalar(0, 0, 200), -2);   // Neg. last arg for filled.
 
     // Value text.
     cv::Point txt_pt(col - spacing / 3, options_.frame_height - border / 3 - 10);
@@ -234,7 +234,7 @@ void VideoPipelineStats::ProcessFrame(FrameSetPtr input, list<FrameSetPtr>* outp
                 txt_pt,
                 cv::FONT_HERSHEY_SIMPLEX,
                 0.5,
-                CV_RGB(0, 0, 0),
+                cv::Scalar(0, 0, 0),
                 2);
 
     // Name text.
@@ -244,7 +244,7 @@ void VideoPipelineStats::ProcessFrame(FrameSetPtr input, list<FrameSetPtr>* outp
                 txt_pt,
                 cv::FONT_HERSHEY_SIMPLEX,
                 0.4,
-                CV_RGB(0, 0, 0),
+                cv::Scalar(0, 0, 0),
                 1);
 
     // Fps text.
@@ -254,7 +254,7 @@ void VideoPipelineStats::ProcessFrame(FrameSetPtr input, list<FrameSetPtr>* outp
                 txt_pt,
                 cv::FONT_HERSHEY_SIMPLEX,
                 0.4,
-                CV_RGB(0, 0, 0),
+                cv::Scalar(0, 0, 0),
                 1);
 
   }
@@ -268,7 +268,7 @@ void VideoPipelineStats::ProcessFrame(FrameSetPtr input, list<FrameSetPtr>* outp
               cv::Point(options_.frame_width - 75, border / 3),
               cv::FONT_HERSHEY_SIMPLEX,
               0.4,
-              CV_RGB(0, 0, 0),
+              cv::Scalar(0, 0, 0),
               1);
 
   // Pass to output.

@@ -89,13 +89,13 @@ void LuminanceUnit::ProcessFrame(FrameSetPtr input, list<FrameSetPtr>* output) {
 
   switch (pixel_format_) {
     case PIXEL_FORMAT_RGB24:
-      convert_flags = CV_RGB2GRAY;
+      convert_flags = cv::COLOR_RGB2GRAY;
       break;
     case PIXEL_FORMAT_BGR24:
-      convert_flags = CV_BGR2GRAY;
+      convert_flags = cv::COLOR_BGR2GRAY;
       break;
     case PIXEL_FORMAT_RGBA32:
-      convert_flags = CV_RGBA2GRAY;
+      convert_flags = cv::COLOR_RGBA2GRAY;
       break;
     default:
       LOG(FATAL) << "Unsupported input pixel format.\n";
@@ -160,7 +160,7 @@ void FlipBGRUnit::ProcessFrame(FrameSetPtr input, list<FrameSetPtr>* output) {
   cv::Mat out_image;
   output_frame->MatView(&out_image);
 
-  cv::cvtColor(image, out_image, CV_RGB2BGR);
+  cv::cvtColor(image, out_image, cv::COLOR_RGB2BGR);
 
   input->push_back(shared_ptr<DataFrame>(output_frame));
   output->push_back(input);

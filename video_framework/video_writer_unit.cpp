@@ -46,6 +46,13 @@ extern "C" {
 #define CODEC_TYPE_VIDEO AVMEDIA_TYPE_VIDEO
 #endif
 
+#ifndef CODEC_ID_NONE // Gone since libavcodec56
+#define CODEC_ID_NONE AV_CODEC_ID_NONE
+#define CODEC_ID_H264 AV_CODEC_ID_H264
+#define CODEC_ID_MPEG2VIDEO AV_CODEC_ID_MPEG2VIDEO
+#define CODEC_ID_MPEG1VIDEO AV_CODEC_ID_MPEG1VIDEO
+#endif
+
 namespace video_framework {
 
 bool VideoWriterUnit::ffmpeg_initialized_ = false;
@@ -123,8 +130,8 @@ bool VideoWriterUnit::OpenStreams(StreamSet* set) {
     }
   }
 
-  avformat_alloc_output_context2(&format_context_, output_format_, NULL,
-                                 video_file_.c_str());
+  format_context_ = avformat_alloc_context();
+  
   if(!format_context_) {
     LOG(ERROR) << "Could not open format context.\n";
     return false;
