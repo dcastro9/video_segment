@@ -225,7 +225,7 @@ void VideoPipelineStats::ProcessFrame(FrameSetPtr input, list<FrameSetPtr>* outp
     cv::Point pt1(col - spacing / 3, row);
     cv::Point pt2(col + spacing / 3, image.rows - border);
     // Bar plot.
-    cv::rectangle(image, pt1, pt2, cv::Scalar(0, 0, 200), -2);   // Neg. last arg for filled.
+    cv::rectangle(image, pt1, pt2, cv::Scalar(200, 0, 0), -2);   // Neg. last arg for filled.
 
     // Value text.
     cv::Point txt_pt(col - spacing / 3, options_.frame_height - border / 3 - 10);
