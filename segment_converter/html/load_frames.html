@@ -1,0 +1,64 @@
+<html>
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- Video resources -->
+<link href="//vjs.zencdn.net/4.9/video-js.css" rel="stylesheet">
+<script src="//vjs.zencdn.net/4.9/video.js"></script>
+<style>
+
+path {
+    opacity: 0.4;
+}
+path:hover {
+    opacity: 0.8;
+}
+
+#vid, #segmentation {
+    position: absolute;
+}
+</style>
+</head>
+
+<body>
+<video id="vid" controls tabindex="0" autobuffer preload="auto" data-setup='{"example_option":true}'>
+    <source type="video/webm" src="video.webm"></source>
+    <p>Sorry, your browser does not support the &lt;video&gt; element.</p>
+</video>
+
+<object id="segmentation" data="frames/frame00000.svg" type="image/svg+xml"></object>
+
+<script>
+
+vid = $("#vid")[0];
+window.setInterval(
+    function() {
+        var frameCount = parseInt(vid.currentTime * 24);
+        var framedir = "frames/frame0000" + frameCount + ".svg";
+        if ($("#segmentation").attr("data") != framedir) {
+            vid.pause();
+            $("#segmentation").attr("data", framedir);
+            vid.play();
+        }
+}, 1000.0 / 30.0);
+
+$("#segmentation")[0].addEventListener("load", function() {
+    var doc = this.getSVGDocument();
+    var paths = doc.querySelectorAll("path");
+
+    for (i = 0; i < paths.length; ++i) {
+        paths[i].setAttribute("opacity", "0.1");
+
+        $(paths[i]).hover(function() {
+            this.setAttribute("opacity", "0.8");
+        }, function() {
+            this.setAttribute("opacity", "0.1");
+        });        
+    }
+
+});
+
+</script>
+</body>
+
+</html>

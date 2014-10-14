@@ -76,6 +76,13 @@ int main(int argc, char** argv) {
     return 1;
   }
 
+  // Denote random colors for visualization of SVG.
+  std::vector<std::string> colors = {"#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e",
+                                     "#f1c40f", "#e67e22", "#e74c3c", "#ecf0f1", "#7f8c8d",
+                                     "#db0a5b", "#81cfe0"};
+  // Store color to index map.
+  std::unordered_map<int, std::string> color_mapping;
+
   // Determine conversion mode.
   enum ConvMode { CONV_TEXT, CONV_SVG, CONV_BINARY, CONV_BITMAP_ID, CONV_BITMAP_COLOR, STRIP };
   ConvMode mode = CONV_TEXT;
@@ -195,30 +202,51 @@ int main(int argc, char** argv) {
       ofs << segmentation.DebugString();
     } else if (mode == CONV_SVG) {
       std::ofstream ofs(curr_file, std::ios_base::out);
-      ofs << "<svg height='" << frame_height << "' width='" << frame_width << "'>";
+      ofs << "<svg xmlns='http://www.w3.org/2000/svg' height='"
+          << frame_height << "' width='" << frame_width << "'>";
       // Iterate through every region. For each region write out an svg path.
       for (int region_idx = 0; region_idx < segmentation.region_size(); ++region_idx) {
-        // Create path.
         SegRegion region = segmentation.region(region_idx);
-        ofs << "<path idx='" << region.id() << "' d='";
+        // Generate / Get Color for current path.
+        if (color_mapping.find(region.id()) == color_mapping.end()) {
+          color_mapping.insert({region.id(), colors[rand() % colors.size()]});
+        }
+        std::string color = color_mapping.find(region.id())->second;
+
+        // Create path.
+        ofs << "<path stroke='black' stroke-width='1' fill-rule='evenodd' fill='" << color
+            << "' idx='" << region.id() << "' d='";
         // Iterate through Polygons that compose a region.
         for (int poly_idx = 0; poly_idx < region.vectorization().polygon_size(); poly_idx++) {
           Polygon polygon = region.vectorization().polygon(poly_idx);
+
           // Iterate through Coordinates in a Polygon.
-          for (int coor_idx = 0; coor_idx < polygon.coord_idx_size(); coor_idx += 2) {
+          for (int coor_idx = 0; coor_idx < polygon.coord_idx_size(); ++coor_idx) {
             if (!polygon.hole()) {
+              int mesh_idx = polygon.coord_idx(coor_idx);
               if (coor_idx == 0) {
                 // Move to first point.
-
+                ofs << " M" << segmentation.vector_mesh().coord(mesh_idx) << " "
+                    << segmentation.vector_mesh().coord(mesh_idx + 1) << " ";
               } else {
                 // Output line to next point.
+                ofs << " L" << segmentation.vector_mesh().coord(mesh_idx) << " "
+                    << segmentation.vector_mesh().coord(mesh_idx + 1) << " ";
               }
             } else {
-              // Go counter clockwise.
-
+              int mesh_idx = polygon.coord_idx(polygon.coord_idx_size() - coor_idx - 1);
+              if (coor_idx == 0) {
+                // Move to first point.
+                ofs << " M" << segmentation.vector_mesh().coord(mesh_idx) << " "
+                    << segmentation.vector_mesh().coord(mesh_idx + 1) << " ";
+              } else {
+                // Output line to next point.
+                ofs << " L" << segmentation.vector_mesh().coord(mesh_idx) << " "
+                    << segmentation.vector_mesh().coord(mesh_idx + 1) << " ";
+              }
             }
           }
-          ofs << " z   ";
+          ofs << " z     ";
         }
         ofs << "'></path>";
       }
