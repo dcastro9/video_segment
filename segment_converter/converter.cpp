@@ -37,6 +37,7 @@
 #include "segment_util/segmentation_util.h"
 
 DEFINE_bool(text_format, false, "Outputs one protobuffer per frame as text.");
+DEFINE_bool(svg_format, false, "Outputs one protobuffer as an SVG file.");
 DEFINE_bool(binary_format, false, "Outputs one protobuffer per frame as binary.");
 DEFINE_double(bitmap_ids, -1, "If set to >= 0, outputs one image per frame as "
                              "3 channel PNG. Pixel represents region ID as single 24bit "
@@ -57,6 +58,10 @@ DEFINE_string(output_dir, ".", "Output directory for bitmaps and protobufs.");
 
 using namespace segmentation;
 
+typedef SegmentationDesc::Region2D SegRegion;
+typedef SegmentationDesc::Polygon Polygon;
+
+
 int main(int argc, char** argv) {
   // Initialize Google's logging library.
   google::InitGoogleLogging(argv[0]);
@@ -72,7 +77,7 @@ int main(int argc, char** argv) {
   }
 
   // Determine conversion mode.
-  enum ConvMode { CONV_TEXT, CONV_BINARY, CONV_BITMAP_ID, CONV_BITMAP_COLOR, STRIP };
+  enum ConvMode { CONV_TEXT, CONV_SVG, CONV_BINARY, CONV_BITMAP_ID, CONV_BITMAP_COLOR, STRIP };
   ConvMode mode = CONV_TEXT;
   float hier_level = 0;
   std::string dest_filename;
@@ -80,6 +85,9 @@ int main(int argc, char** argv) {
   if (FLAGS_text_format) {
     mode = CONV_TEXT;
     std::cout << "Converting to text.";
+  } else if (FLAGS_svg_format) {
+    mode = CONV_SVG;
+    std::cout << "Converting to SVG.";
   } else if (FLAGS_binary_format) {
     mode = CONV_BINARY;
     std::cout << "Converting to binary format.";
@@ -163,6 +171,8 @@ int main(int argc, char** argv) {
     std::string curr_file = FLAGS_output_dir + "/";
     if (mode == CONV_TEXT) {
       curr_file += base::StringPrintf("frame%05d.pbtxt", f);
+    } else if (mode == CONV_SVG) {
+      curr_file += base::StringPrintf("frame%05d.svg", f);
     } else if (mode == CONV_BINARY) {
       curr_file += base::StringPrintf("frame%05d.pb", f);
     } else {
@@ -183,6 +193,36 @@ int main(int argc, char** argv) {
     } else if (mode == CONV_TEXT) {
       std::ofstream ofs(curr_file, std::ios_base::out);
       ofs << segmentation.DebugString();
+    } else if (mode == CONV_SVG) {
+      std::ofstream ofs(curr_file, std::ios_base::out);
+      ofs << "<svg height='" << frame_height << "' width='" << frame_width << "'>";
+      // Iterate through every region. For each region write out an svg path.
+      for (int region_idx = 0; region_idx < segmentation.region_size(); ++region_idx) {
+        // Create path.
+        SegRegion region = segmentation.region(region_idx);
+        ofs << "<path idx='" << region.id() << "' d='";
+        // Iterate through Polygons that compose a region.
+        for (int poly_idx = 0; poly_idx < region.vectorization().polygon_size(); poly_idx++) {
+          Polygon polygon = region.vectorization().polygon(poly_idx);
+          // Iterate through Coordinates in a Polygon.
+          for (int coor_idx = 0; coor_idx < polygon.coord_idx_size(); coor_idx += 2) {
+            if (!polygon.hole()) {
+              if (coor_idx == 0) {
+                // Move to first point.
+
+              } else {
+                // Output line to next point.
+              }
+            } else {
+              // Go counter clockwise.
+
+            }
+          }
+          ofs << " z   ";
+        }
+        ofs << "'></path>";
+      }
+      ofs << "</svg>";
     } else if (mode == CONV_BITMAP_ID) {
       cv::Mat id_image(frame_height, frame_width, CV_32S);
       SegmentationDescToIdImage(absolute_level,
@@ -198,7 +238,8 @@ int main(int argc, char** argv) {
       cv::split(id_image_view, id_channels);
       cv::Mat frame_buffer(frame_height, frame_width, CV_8UC3);
       cv::merge(&id_channels[0], 3, frame_buffer);
-      cv::imwrite(curr_file, frame_buffer);
+      // TODO(dcastro): Investigate why imwrite not available -- getting build errors.
+      // cv::imwrite(curr_file, frame_buffer);
     } else if (mode == CONV_BITMAP_COLOR) {
       cv::Mat frame_buffer(frame_height, frame_width, CV_8UC3);
       RenderRegionsRandomColor(absolute_level,
@@ -207,7 +248,8 @@ int main(int argc, char** argv) {
                                segmentation,
                                &hierarchy,
                                &frame_buffer);
-      cv::imwrite(curr_file, frame_buffer);
+      // TODO(dcastro): Investigate why imwrite not available -- getting build errors.
+      // cv::imwrite(curr_file, frame_buffer);
     } else if (mode == STRIP) {
       std::string stripped_data;
       StripToEssentials(segmentation,
