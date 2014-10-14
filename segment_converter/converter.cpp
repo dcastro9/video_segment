@@ -234,6 +234,7 @@ int main(int argc, char** argv) {
                     << segmentation.vector_mesh().coord(mesh_idx + 1) << " ";
               }
             } else {
+              // Start at the end, go counterclockwise to properly draw holes in SVG.
               int mesh_idx = polygon.coord_idx(polygon.coord_idx_size() - coor_idx - 1);
               if (coor_idx == 0) {
                 // Move to first point.
