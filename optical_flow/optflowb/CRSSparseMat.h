@@ -18,11 +18,11 @@ class CRSSparseMat
 
 		~CRSSparseMat(void);
 
-		//BOAZ: UNSAFE TO USE, you better know what you're doing.
+		// It is not recommended that you use the three following functions unless
+		// you know what you are doing.
+		// TODO(dcastro): May be best to remove these.
 		float* val() {return _val;}
-		//BOAZ: UNSAFE TO USE, you better know what you're doing.
 		int* rowPtr() {return _rowPtr;}
-		//BOAZ: UNSAFE TO USE, you better know what you're doing.
 		int* colIdx() {return _colIdx;}
 
 		float& val(int i) {return _val[i];}

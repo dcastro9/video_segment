@@ -1,6 +1,6 @@
 #pragma once
-class COOrdSparseMat
-{
+
+class COOrdSparseMat {
 	private:
 		float* _val;
 		int* _rowIdx;
@@ -15,11 +15,11 @@ class COOrdSparseMat
 		
 		~COOrdSparseMat(void);
 
-		//BOAZ: UNSAFE TO USE, you better know what you're doing.
+		// It is not recommended that you use the three following functions unless
+		// you know what you are doing.
+		// TODO(dcastro): May be best to remove these.
 		float* val() {return _val;}
-		//BOAZ: UNSAFE TO USE, you better know what you're doing.
 		int* rowIdx() {return _rowIdx;}
-		//BOAZ: UNSAFE TO USE, you better know what you're doing.
 		int* colIdx() {return _colIdx;}
 
 		float& val(int i) {return _val[i];}
@@ -34,7 +34,7 @@ class COOrdSparseMat
 		int cols() const {return _cols;}
 		int nonZeros() const {return _nz;}
 
-		COOrdSparseMat& operator= (const COOrdSparseMat& other);
+		COOrdSparseMat& operator = (const COOrdSparseMat& other);
 
 		float operator() (int i, int j) const;
 		void set(int i, int j, float val);
