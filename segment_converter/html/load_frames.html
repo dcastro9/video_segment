@@ -7,13 +7,6 @@
 <script src="//vjs.zencdn.net/4.9/video.js"></script>
 <style>
 
-path {
-    opacity: 0.4;
-}
-path:hover {
-    opacity: 0.8;
-}
-
 #vid, #segmentation {
     position: absolute;
 }
@@ -26,7 +19,17 @@ path:hover {
     <p>Sorry, your browser does not support the &lt;video&gt; element.</p>
 </video>
 
-<object id="segmentation" data="frames/frame00000.svg" type="image/svg+xml"></object>
+<object id="segmentation" data="frames/frame00000.svg" type="image/svg+xml">
+<style>
+path {
+    opacity: 0.4;
+}
+path:hover {
+    opacity: 0.8;
+}
+</style>
+
+</object>
 
 <script>
 
