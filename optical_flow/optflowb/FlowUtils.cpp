@@ -1,18 +1,18 @@
-#include <vector>
 #include <algorithm>
-#include <string>
 #include <cmath>
+#include <fstream>
 #include <limits>
-using namespace std;
+#include <vector>
+
 #include "highgui.h" 
 #include "cv.h"
-#include <fstream>
 #include "FlowUtils.h"
 
+using namespace std;
+
+// TODO(dcastro): This file needs more cleaning up.
 int ncols = 0;
-#define MAXCOLS 60
 int colorwheel[MAXCOLS][3];
-void makecolorwheel();
 
 float UtilsFlow::FindMaxLength(cv::Mat& U,cv::Mat& V)
 {

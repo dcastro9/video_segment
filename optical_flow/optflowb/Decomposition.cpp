@@ -2,17 +2,19 @@
 #include "Defs.h"
 #include <highgui.h>
 
-void Decomposition::findMinMax(const cv::Mat& img, float &min, float &max) {
-	float * ptr = (float *) img.data;
+void Decomposition::findMinMax(const cv::Mat& img, float& min, float& max) {
+	float* ptr = (float*) img.data;
 	float lmin, lmax;
 	lmin = lmax = *ptr;
 
 	int size = img.rows * img.cols;
-	for (int i = 0 ; i < size ; ++i , ++ptr){
-		if (*ptr<lmin)
-			lmin=*ptr;
-		if (*ptr>lmax)
-			lmax=*ptr;
+	for (int i = 0; i < size; ++i , ++ptr) {
+		if (*ptr < lmin) {
+			lmin = *ptr;
+		}
+		if (*ptr > lmax) {
+			lmax = *ptr;
+		}
 	}
 
 	min = lmin;
@@ -20,14 +22,14 @@ void Decomposition::findMinMax(const cv::Mat& img, float &min, float &max) {
 }
 
 // Reproject so each vector given by [p0 p1] is of length <=1
-void Decomposition::Reproject(cv::Mat& p0, cv::Mat& p1) {
+void Decomposition::reProject(cv::Mat& p0, cv::Mat& p1) {
 	//cv::Mat reprojection(p0.rows,p0.cols,OPTFLOW_TYPE, cv::Scalar(0));
 	float * p0Ptr = (float *) p0.data;
 	float * p1Ptr = (float *) p1.data;
 	float rep;
 	int size = p0.rows * p0.cols;
 	for (int i = 0; i < size; ++i, ++p0Ptr, ++p1Ptr) {
-		rep = std::max(1.0f, std::sqrtf((*p0Ptr)*(*p0Ptr)+(*p1Ptr)*(*p1Ptr)));
+		rep = std::max(1.0f, std::sqrtf((*p0Ptr) * (*p0Ptr) + (*p1Ptr) * (*p1Ptr)));
 		if (rep > 1) {
 			*p0Ptr = (*p0Ptr) / rep;
 			*p1Ptr = (*p1Ptr) / rep;
@@ -134,7 +136,7 @@ void Decomposition::structureTextureDecompositionRof(const cv::Mat& in1,
 			p[1] += I_y;
 
 			// Reproject to |p| <= 1
-			Reproject(p[0], p[1]);	
+			reProject(p[0], p[1]);	
 		}
 		// compute divergence (same as first)
 		cv::filter2D(p[0], tmp1, type, ker1, cv::Point(-1,-1), 0, cv::BORDER_CONSTANT);
