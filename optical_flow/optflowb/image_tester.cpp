@@ -8,7 +8,7 @@
 #include <iostream>
 using namespace std;
 
-void calculateFlowPerformence(string files[]){
+void calculateFlowPerformance(string files[]){
 	cv::Mat image1 = cv::imread(files[1]);
 	cv::Mat image2 = cv::imread(files[2]);
 	
@@ -29,13 +29,13 @@ void calculateFlowPerformence(string files[]){
 	image2Gray.release();
 
 	OpticalFlowParams GNC1params(3, 5, 0.5f, 0.5f, false, 5, 100, 1.9f, false, 0.01f, 3, 1, 0.001f, 
-									PenaltyFunctionCompute::Quadratic, 
-									PenaltyFunctionCompute::Second, 
-									PenaltyFunctionCompute::Quadratic,
-									PenaltyFunctionCompute::Second,
-									PenaltyFunctionCompute::Quadratic, 
-									PenaltyFunctionCompute::Second,
-									true, 1.0f/8.0f, 100, 0.95f, false, false);
+								 PenaltyFunctionCompute::Quadratic, 
+								 PenaltyFunctionCompute::Second, 
+								 PenaltyFunctionCompute::Quadratic,
+								 PenaltyFunctionCompute::Second,
+								 PenaltyFunctionCompute::Quadratic, 
+								 PenaltyFunctionCompute::Second,
+								 true, 1.0f / 8.0f, 100, 0.95f, false, false);
 
 	flowUV* UV = OpticalFlow::calculate(image1GrayFloat, image2GrayFloat, GNC1params);
 
@@ -178,7 +178,7 @@ int main (int argc,char** argv)
 	files[7][2] = "Data\\Venus\\frame11.png";
 	if (true){
 		size_t start = std::clock();
-		calculateFlowPerformence(files[4]);
+		calculateFlowPerformance(files[4]);
 		cout << "Took " << (std::clock() - start) / 1000.0f << endl;
 		//calculateFlow(files[4], true, false);
 	}else{

@@ -2,8 +2,7 @@
 #include <cv.h>
 #include "flowUV.h"
 
-class FlowError
-{
+class FlowError {
 public:	
 	static float* calcError(flowUV& UV, flowUV& GT, bool display = true);
 };

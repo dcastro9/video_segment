@@ -11,14 +11,13 @@ float* FlowError::calcError(flowUV& UV, flowUV& GT,  bool display){
 	cv::Mat mask(UV.getU().rows, UV.getU().cols, CV_8U,cv::Scalar(0));
 	float* gu = (float*)GT.getU().data;
 	float* gv = (float*)GT.getV().data;
-	uchar* m =  mask.data;
-	for (int i = 0 ; i < GT.getU().rows * GT.getU().cols; ++i, ++gu, ++gv, ++m){
-		if ((std::abs(*gv) == 0 && std::abs(*gu) == 0) | (std::abs(*gv) > 1000000000) | (std::abs(*gu) > 1000000000))
-		{
+	uchar* m = mask.data;
+	for (int i = 0 ; i < GT.getU().rows * GT.getU().cols; ++i, ++gu, ++gv, ++m) {
+		if ((std::abs(*gv) == 0 && std::abs(*gu) == 0) | 
+			(std::abs(*gv) > 1000000000) | 
+			(std::abs(*gu) > 1000000000)) {
 			*m = 0;
-		}
-		else
-		{
+		} else {
 			*m = 1;
 			++size;
 		}
@@ -88,7 +87,8 @@ float* FlowError::calcError(flowUV& UV, flowUV& GT,  bool display){
 
 
 
-	cv::Mat epe1 = (GT.getU() - UV.getU()).mul((GT.getU() - UV.getU())) + (GT.getV() - UV.getV()).mul((GT.getV() - UV.getV()));
+	cv::Mat epe1 = (GT.getU() - UV.getU()).mul((GT.getU() - UV.getU())) + 
+				   (GT.getV() - UV.getV()).mul((GT.getV() - UV.getV()));
 	cv::Mat epe2(UV.getU().rows, UV.getU().cols, OPTFLOW_TYPE,cv::Scalar(0));;
 	cv::sqrt(epe1, epe2);
 	cv::Mat epe(size, 1, OPTFLOW_TYPE,cv::Scalar(0));
@@ -96,24 +96,25 @@ float* FlowError::calcError(flowUV& UV, flowUV& GT,  bool display){
 	float* pepe =  (float*)epe.data;
 	m =  mask.data;
 	for(int i = 0; i < UV.getU().rows * UV.getU().cols; ++i, ++pepe2, ++m){
-		if (*m){
+		if (*m) {
 			*(pepe++) = *(pepe2);
 		}
-	} 
+	}
+	
 	float mepe = (float)cv::mean(epe).val[0];
-
-
 	float* ret = new float[3];
 	ret[0] = mang;
 	ret[1] = stdang;
 	ret[2] = mepe;
-	if (display){
+
+	if (display) {
 		UtilsMat::clamp<float>(epe2,0,1);
 		pepe2 = (float*)epe2.data;
 		m = mask.data;
 		
-		for(int i = 0; i < epe2.cols * epe2.rows; ++i, ++pepe2, ++m)
+		for (int i = 0; i < epe2.cols * epe2.rows; ++i, ++pepe2, ++m) {
 			*(pepe2) = *(pepe2) * *(m);
+		}
 
 		cv::imshow("End Point Error Visualization", epe2);
 		cv::waitKey(1);

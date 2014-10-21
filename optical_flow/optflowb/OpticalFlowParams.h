@@ -6,7 +6,7 @@ private:
 	//operator smoothness param
 	float _alpha;
 
-	//pyramid parmas
+	//pyramid params
 	int _pyramidLevels;
 	float _pyramidSpacing;
 
