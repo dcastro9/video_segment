@@ -66,7 +66,7 @@ FlowOperator::~FlowOperator(){
 
 
 
-void FlowOperator::bulidA (CRSSparseMat* const A,
+void FlowOperator::buildA (CRSSparseMat* const A,
 						const int	cols,
 						const int	rows,
 						const float* const		duu, 
@@ -431,7 +431,7 @@ void FlowOperator::construct(flowUV& UV, const cv::Mat& Du, const cv::Mat& Dv, c
 	duu -= FUD;
 	dvv -= FVD;
 	
-	this->bulidA(	(CRSSparseMat* const)&_A, 
+	this->buildA(	(CRSSparseMat* const)&_A, 
 			(const int)_cols, 
 			(const int)_rows, 
 			(const float* const)duu.data, 
