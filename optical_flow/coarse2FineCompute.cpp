@@ -73,8 +73,8 @@ flowUV* OpticalFlow::calculate(const cv::Mat& Im1, const cv::Mat& Im2, const Opt
 		cout << "Pyramid level " << k << " |- " << "cols: " << curr1Level.cols << " , rows: " << curr1Level.rows << endl;
 #endif
 		if (curr1Level.channels() >= 3){
-			cv::cvtColor(curr1Level, curr1Level, CV_BGR2GRAY);
-			cv::cvtColor(curr2Level, curr2Level, CV_BGR2GRAY);
+			cv::cvtColor(curr1Level, curr1Level, cv::COLOR_BGR2GRAY);
+			cv::cvtColor(curr2Level, curr2Level, cv::COLOR_BGR2GRAY);
 		}
 		if (k != 0){
 			UV->reshape(curr1Level.rows, curr1Level.cols);

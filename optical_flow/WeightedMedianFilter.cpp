@@ -1,7 +1,6 @@
 #include <iostream>
-#include "highgui.h" 
-#include "cv.h"
 #include "WeightedMedianFilter.h"
+#include <opencv2/highgui/highgui.hpp>
 #include "UtilsDebug.h"
 #include "Defs.h"
 

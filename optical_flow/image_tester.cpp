@@ -1,11 +1,18 @@
-#include "coarse2FineCompute.h"
 #include <ctime>
-#include "FlowError.h"
-#include "OpticalFlowParams.h"
-#include "FlowUtils.h"
-#include "UtilsDebug.h"
-#include "Defs.h"
 #include <iostream>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/imgcodecs/imgcodecs.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+#include "coarse2FineCompute.h"
+#include "Defs.h"
+#include "FlowError.h"
+#include "FlowUtils.h"
+#include "OpticalFlowParams.h"
+#include "UtilsDebug.h"
+
+
+
 using namespace std;
 
 void calculateFlowPerformance(string files[]){
@@ -14,8 +21,8 @@ void calculateFlowPerformance(string files[]){
 	
 	cv::Mat image1Gray(image1.rows, image1.cols, CV_MAKETYPE(image1.depth(), 1));
 	cv::Mat image2Gray(image2.rows, image2.cols, CV_MAKETYPE(image2.depth(), 1));
-	cv::cvtColor(image1, image1Gray, CV_BGR2GRAY);
-	cv::cvtColor(image2, image2Gray, CV_BGR2GRAY);
+	cv::cvtColor(image1, image1Gray, cv::COLOR_BGR2GRAY);
+	cv::cvtColor(image2, image2Gray, cv::COLOR_BGR2GRAY);
 	
 	image1.release();
 	image2.release();
@@ -59,8 +66,8 @@ float* calculateFlow(string files[], bool verbose = false, bool ignoreErr = fals
 	
 	cv::Mat image1Gray(image1.rows, image1.cols, CV_MAKETYPE(image1.depth(), 1));
 	cv::Mat image2Gray(image2.rows, image2.cols, CV_MAKETYPE(image2.depth(), 1));
-	cv::cvtColor(image1, image1Gray, CV_BGR2GRAY);
-	cv::cvtColor(image2, image2Gray, CV_BGR2GRAY);
+	cv::cvtColor(image1, image1Gray, cv::COLOR_BGR2GRAY);
+	cv::cvtColor(image2, image2Gray, cv::COLOR_BGR2GRAY);
 	
 	image1.release();
 	image2.release();

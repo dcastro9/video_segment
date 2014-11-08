@@ -4,7 +4,7 @@
 #include "UtilsDebug.h"
 #include "Defs.h"
 #include <math.h>
-#include <highgui.h>
+#include <opencv2/highgui/highgui.hpp>
 
 float* FlowError::calcError(flowUV& UV, flowUV& GT,  bool display){
 	int size = 0;
@@ -51,7 +51,7 @@ float* FlowError::calcError(flowUV& UV, flowUV& GT,  bool display){
 	pmsv = (float*)msv.data;
 	float* pn =  (float*)n.data;
 	for(int i = 0; i < size; ++i, ++pmsu, ++pmsv, ++pn){
-		*pn = (1.0f/ std::sqrtf((*pmsu) * (*pmsu) + (*pmsv) * (*pmsv) + 1));
+		*pn = (1.0f/ std::sqrt((*pmsu) * (*pmsu) + (*pmsv) * (*pmsv) + 1));
 	}
 
 	cv::Mat un = msu.mul(n);
@@ -62,7 +62,7 @@ float* FlowError::calcError(flowUV& UV, flowUV& GT,  bool display){
 	pmstv = (float*)mstv.data;
 	float* ptn =  (float*)tn.data;
 	for(int i = 0; i < size; ++i, ++pmstu, ++pmstv, ++ptn){
-		*ptn = (1.0f/ std::sqrtf((*pmstu) * (*pmstu) + (*pmstv) * (*pmstv) + 1));
+		*ptn = (1.0f/ std::sqrt((*pmstu) * (*pmstu) + (*pmstv) * (*pmstv) + 1));
 	}
 
 	cv::Mat tun = mstu.mul(tn);

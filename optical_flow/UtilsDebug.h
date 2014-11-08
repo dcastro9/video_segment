@@ -1,6 +1,6 @@
 #pragma once
 #include <fstream>
-#include "cv.h"
+#include <opencv2/opencv.hpp>
 #include "FArray.h"
 #include "CRSSparseMat.h"
 #include "limits.h"

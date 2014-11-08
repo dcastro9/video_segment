@@ -4,8 +4,8 @@
 #include <limits>
 #include <vector>
 
-#include "highgui.h" 
-#include "cv.h"
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include "FlowUtils.h"
 
 using namespace std;

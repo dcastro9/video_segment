@@ -1,7 +1,7 @@
 #ifndef WeightedMedianFilter_H_
 #define WeightedMedianFilter_H_
 
-#include "cv.h"
+#include <opencv2/opencv.hpp>
 
 class WeightedMedianFilter{
 	

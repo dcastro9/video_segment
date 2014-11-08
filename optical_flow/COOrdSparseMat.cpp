@@ -1,5 +1,5 @@
 #include "COOrdSparseMat.h"
-#include "cv.h"
+#include <opencv2/opencv.hpp>
 
 COOrdSparseMat::COOrdSparseMat(int M, int N, int nz, float* val, int* row, int* col) :
 							   _val(val), _rowIdx(row), _colIdx(col), _nz(nz), _rows(M), _cols(N) {}

@@ -1,6 +1,6 @@
 #include "Decomposition.h"
 #include "Defs.h"
-#include <highgui.h>
+#include <opencv2/highgui/highgui.hpp>
 
 void Decomposition::findMinMax(const cv::Mat& img, float& min, float& max) {
 	float* ptr = (float*) img.data;
@@ -29,7 +29,7 @@ void Decomposition::reProject(cv::Mat& p0, cv::Mat& p1) {
 	float rep;
 	int size = p0.rows * p0.cols;
 	for (int i = 0; i < size; ++i, ++p0Ptr, ++p1Ptr) {
-		rep = std::max(1.0f, std::sqrtf((*p0Ptr) * (*p0Ptr) + (*p1Ptr) * (*p1Ptr)));
+		rep = std::max(1.0f, std::sqrt((*p0Ptr) * (*p0Ptr) + (*p1Ptr) * (*p1Ptr)));
 		if (rep > 1) {
 			*p0Ptr = (*p0Ptr) / rep;
 			*p1Ptr = (*p1Ptr) / rep;

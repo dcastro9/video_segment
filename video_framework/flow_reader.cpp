@@ -32,6 +32,12 @@
 #include <opencv2/video/tracking.hpp>
 
 #include "base/base_impl.h"
+#include "optical_flow/coarse2FineCompute.h"
+#include "optical_flow/Defs.h"
+#include "optical_flow/FlowError.h"
+#include "optical_flow/FlowUtils.h"
+#include "optical_flow/OpticalFlowParams.h"
+#include "optical_flow/UtilsDebug.h"
 
 namespace video_framework {
 
@@ -173,9 +179,7 @@ bool DenseFlowReaderUnit::PostProcess(list<FrameSetPtr>* output) {
   return false;
 }
 
-DenseFlowUnit::~DenseFlowUnit() {
-
-}
+DenseFlowUnit::~DenseFlowUnit() {}
 
 bool DenseFlowUnit::OpenStreams(StreamSet* set) {
   video_stream_idx_ = FindStreamIdx(options_.input_stream_name, set);
@@ -186,6 +190,7 @@ bool DenseFlowUnit::OpenStreams(StreamSet* set) {
   }
 
   // Prepare flow lib.
+  // TODO(dcastro): Remove.
   flow_engine_.reset(new cv::Ptr<cv::DenseOpticalFlow>());
   *flow_engine_ = cv::createOptFlow_DualTVL1();
   (*flow_engine_)->set("warps", options_.num_warps);
@@ -274,6 +279,19 @@ void DenseFlowUnit::ProcessFrame(FrameSetPtr input, list<FrameSetPtr>* output) {
     if (options_.flow_type == FLOW_FORWARD || options_.flow_type == FLOW_BOTH) {
       forward_flow_frame.reset(new DenseFlowFrame(width, height, false, pts));
       cv::Mat flow_field = forward_flow_frame->MatViewInterleaved();
+
+      /* Added optical flow. */
+      OpticalFlowParams params(3, 5, 0.5f, 0.5f, false, 5, 100, 1.9f, false, 0.01f, 3, 1, 0.001f, 
+                               PenaltyFunctionCompute::Quadratic, 
+                               PenaltyFunctionCompute::Second, 
+                               PenaltyFunctionCompute::Quadratic,
+                               PenaltyFunctionCompute::Second,
+                               PenaltyFunctionCompute::Quadratic, 
+                               PenaltyFunctionCompute::Second,
+                               true, 1.0f / 8.0f, 100, 0.95f, false, false);
+      //flowUV* UV = OpticalFlow::calculate(*prev_img_, image, params);
+      /* End added optical flow. */
+
       (*flow_engine_)->calc(*prev_img_, image, flow_field);
 
       if (!options_.forward_flow_stream_name.empty()) {

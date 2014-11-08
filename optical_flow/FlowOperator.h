@@ -1,5 +1,5 @@
 #pragma once
-#include "cv.h"
+#include <opencv2/opencv.hpp>
 #include "flowUV.h"
 #include "CRSSparseMat.h"
 #include "OpticalFlowParams.h"

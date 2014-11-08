@@ -9,6 +9,7 @@ set(DEPENDENT_LIBRARIES ${GFLAGS_LIBRARIES}
 set(DEPENDENT_PACKAGES base
                        video_framework
                        segmentation
+                       optical_flow
                        )
 if(NO_X_SUPPORT)
   # Nothing to do here.

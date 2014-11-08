@@ -1,5 +1,5 @@
 #pragma once
-#include "cv.h"
+#include <opencv2/opencv.hpp>
 #include "FArray.h"
 
 class UtilsMat
@@ -51,16 +51,16 @@ public:
 	}
 
 	//min every value of the m mat with the val param
-	template<class T> static void min(const cv::Mat& m, T val){
+	template<class T> static void min(const cv::Mat& src, T val){
 		for(int i = 0; i < src.cols * src.rows; ++i){
-			((T*)dst.data)[i] = std::min<T>(val, ((T*)src.data)[i]);
+			((T*)src.data)[i] = std::min<T>(val, ((T*)src.data)[i]);
 		}
 	}
 
-	//max every value of the src m with the val param
-	template<class T> static void max(const cv::Mat& m, T val){
+	//max every value of the src with the val param
+	template<class T> static void max(const cv::Mat& src, T val){
 		for(int i = 0; i < src.cols * src.rows; ++i){
-			((T*)dst.data)[i] = std::max<T>(val, ((T*)src.data)[i]);
+			((T*)src.data)[i] = std::max<T>(val, ((T*)src.data)[i]);
 		}
 	}
 

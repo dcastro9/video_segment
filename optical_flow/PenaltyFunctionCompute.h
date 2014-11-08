@@ -1,7 +1,7 @@
 #ifndef PenaltyFunction_H_
 #define PenaltyFunction_H_
 
-#include "cv.h"
+#include <opencv2/opencv.hpp>
 
 class PenaltyFunctionCompute{
 

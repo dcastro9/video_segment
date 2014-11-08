@@ -1,8 +1,10 @@
-#include "cv.h"
-#include "UtilsDebug.h"
-#include "highgui.h" 
 #include "Defs.h"
+#include "UtilsDebug.h"
+
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <vector>
+
 class GaussPyramid {
 private:
 	vector<cv::Mat> ImPyramid;

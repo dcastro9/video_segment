@@ -35,6 +35,7 @@
 namespace cv {
   class Mat;
   class DenseOpticalFlow;
+  class OpticalFlow;
   template<class T> class Ptr;
 }
 
