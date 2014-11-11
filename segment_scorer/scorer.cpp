@@ -266,7 +266,31 @@ int main(int argc, char** argv) {
       }
     }
 
+    std::map<int, float> temp_scores;
+    // Iterate through segments, and choose the rule of thirds
+    for (int pt_idx = 0; pt_idx < rot_points.size(); pt_idx++) {
+      temp_scores[pt_idx] = 0;
+      for (const auto& segment: segment_sizes) {
+        // Calculate the distance for each segment.
+        std::vector<int>* bounding_box = &segment_bounding_box[segment.first];
+        int center_x = (*bounding_box)[1] - (*bounding_box)[0];
+        int center_y = (*bounding_box)[3] - (*bounding_box)[2];
+        float calc_distance = dist2D(center_x,
+                                     center_y,
+                                     rot_points[pt_idx][0],
+                                     rot_points[pt_idx][1]);
+        temp_scores[pt_idx] += 1.0f / calc_distance;
+      }
+    }
 
+    float scoreMax = 0.f;
+    int thirds_index = -1;
+    for (const auto& temp_score : temp_scores) {
+      if (temp_score.second > scoreMax) {
+        scoreMax = temp_score.second;
+        thirds_index = temp_score.first;
+      }
+    }
 
     // After iterating through the segments, we divide the summed color by the size of the
     // segments to get the average color.
@@ -283,20 +307,11 @@ int main(int argc, char** argv) {
         (*avg_colors)[2] /= segment.second;
       }
 
-      // Iterate through rot points to find shortest distance.
-      float distance = -1;
-      for (int pt_idx = 0; pt_idx < rot_points.size(); pt_idx++) {
-        float calc_distance = dist2D(center_x,
-                                      center_y,
-                                      rot_points[pt_idx][0],
-                                      rot_points[pt_idx][1]);
-        if (distance == -1) {
-          distance = calc_distance;
-        }
-        else if (calc_distance < distance) {
-          distance = calc_distance;
-        }
-      }
+      // Calculate shortest distance based on max score.
+      float distance = dist2D(center_x,
+                              center_y,
+                              rot_points[thirds_index][0],
+                              rot_points[thirds_index][1]);
 
       // Iterate through colors to find closest color.
       float color_distance = -1;
@@ -335,7 +350,8 @@ int main(int argc, char** argv) {
 
   // Normalize scores and write to file.
   for (int idx = 0; idx < scores.size(); idx++) {
-    scores[idx] = (scores[idx] - min_score) / (max_score - min_score);
+    // Don't normalize.
+    // scores[idx] = (scores[idx] - min_score) / (max_score - min_score);
     output_stream << idx << "," << scores[idx] << std::endl;
   }
 
