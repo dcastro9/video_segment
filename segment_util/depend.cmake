@@ -7,7 +7,7 @@ set(DEPENDENT_PACKAGES base)
 
 set(DEPENDENT_INCLUDES ${PROTOBUF_INCLUDE_DIRS}
                        ${OpenCV_INCLUDE_DIRS}
-		       ${Boost_INCLUDE_DIR}
+		               ${Boost_INCLUDE_DIR}
                        ${GLOG_INCLUDE_DIR}
                        )
 

@@ -32,6 +32,8 @@
 #include <gflags/gflags.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/imgcodecs/imgcodecs.hpp>
 
 DEFINE_string(input_video, "", "The input video (.mp4) REQUIRED");
 DEFINE_bool(logging, false, "If set output various logging information.");
@@ -45,11 +47,11 @@ struct ColorBin {
   // Index to which color this bin is.
   int color_idx;
   // Point with the maximum distance away from the color_idx.
-  float radius = -1.f;
+  float radius = 0.f;
   // The weight of this bin.
   int weight;
   // List of RGB points that belong to this bin.
-  std::vector<RGBPoint> points;
+  int num_points = 0;
 };
 
 float dist2D(float dX0, float dY0, float dX1, float dY1) {
@@ -176,12 +178,19 @@ int main(int argc, char** argv) {
     LOG(INFO) << "Processing frame " << frame_idx << std::endl;
     // Get video.
     cv::Mat current_frame(frame_width, frame_height, CV_8UC3);
+    
     capture >> current_frame;
+    // LOG(INFO) << resized_frame.cols << "," << resized_frame.rows << std::endl;
+    // break;
     // Breakpoint.
     if (current_frame.empty()) {
       LOG(INFO) << "Current frame is empty, exiting for loop.";
       break;
     }
+    cv::Mat resized_frame;
+    cv::resize(current_frame, resized_frame, cv::Size(), 0.1, 0.1);
+    frame_width = resized_frame.cols;
+    frame_height = resized_frame.rows;
 
     // Create bins.
     std::unordered_map<int, ColorBin> bins;
@@ -196,22 +205,16 @@ int main(int argc, char** argv) {
     uchar* output_ptr;
     float color_distance;
     int color_idx;
-    for (int y_idx = 0; y_idx < current_frame.rows; y_idx++) {
-      output_ptr = current_frame.ptr<uchar>(y_idx);
-      for (int x_idx = 0; x_idx < current_frame.cols; x_idx += 3) {
-        RGBPoint point;
-        // Pixel values
-        point.b = int(output_ptr[x_idx]); // Blue
-        point.g = int(output_ptr[x_idx + 1]); // Green
-        point.r = int(output_ptr[x_idx + 2]); // Red
-
-        // Find closest color.
+    for (int y_idx = 0; y_idx < resized_frame.rows; y_idx++) {
+      output_ptr = resized_frame.ptr<uchar>(y_idx);
+      for (int x_idx = 0; x_idx < 3 * resized_frame.cols; x_idx += 3) {
+        // Find color bin.
         color_distance = -1;
         color_idx = -1;
         for (int pt_idx = 0; pt_idx < colors.size(); pt_idx++) {
-          float calc_distance = rgb_distance(point.r,
-                                             point.g,
-                                             point.b,
+          float calc_distance = rgb_distance(int(output_ptr[x_idx]),
+                                             int(output_ptr[x_idx + 1]),
+                                             int(output_ptr[x_idx + 2]),
                                              colors[pt_idx][0],
                                              colors[pt_idx][1],
                                              colors[pt_idx][2]);
@@ -224,20 +227,24 @@ int main(int argc, char** argv) {
             color_idx = pt_idx;
           }
         }
-        // Add to bin.
-        bins[color_idx].points.push_back(point);
-        // Assign radius if it is farther out.
-        if (color_distance > bins[color_idx].radius || bins[color_idx].radius < 0) {
-          bins[color_idx].radius = color_distance;
-        }
+        // Add to radius sum, and num_points.
+        bins[color_idx].radius += color_distance;
+        bins[color_idx].num_points++;
       }
     } // Finish image iteration.
 
     float score = 0;
     // Calculate the score based on color bins.
     for (auto& bin : bins) {
-      score += bin.second.radius * bin.second.weight;
+      LOG(INFO) << "Bin: " << bin.first << " Radius: " << bin.second.radius 
+                << " Weight: " << bin.second.weight << " Points: " << bin.second.num_points
+                << "Scale: " << float(bin.second.num_points) / float(frame_width * frame_height)
+                << std::endl;
+      score += (bin.second.radius * bin.second.weight) / float(frame_width * frame_height);
     }
+    LOG(INFO) << "Total points: " << frame_width * frame_height;
+    LOG(INFO) << "Total score: " << score;
+
     scores[frame_idx] = score;
     frame_idx++;
   } // Closes for loop that iterates each frame.
