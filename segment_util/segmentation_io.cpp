@@ -199,6 +199,7 @@ bool SegmentationReader::OpenFileAndReadHeaders() {
 
     // We only process chunk headers while skipping over seg frames.
     if (strcmp(header_type, "CHNK") != 0) {
+      LOG(ERROR) << "File: " << filename_;
       LOG(ERROR) << "Parsing error, expected chunk header at current offset."
                  << " Found: " << header_type;
       return false;
