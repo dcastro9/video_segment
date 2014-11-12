@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
   int cyan[] = {0, 255, 255};
   int black[] = {0, 0, 0};
 
-  color_weights[white] = 10;
+  color_weights[white] = 1;
   color_weights[yellow] = 9;
   color_weights[yellow_green] = 7;
   color_weights[green] = 6;
