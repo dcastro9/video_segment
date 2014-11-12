@@ -211,9 +211,9 @@ int main(int argc, char** argv) {
         color_distance = -1;
         color_idx = -1;
         for (int pt_idx = 0; pt_idx < colors.size(); pt_idx++) {
-          float calc_distance = rgb_distance(int(output_ptr[x_idx]),
+          float calc_distance = rgb_distance(int(output_ptr[x_idx + 2]),
                                              int(output_ptr[x_idx + 1]),
-                                             int(output_ptr[x_idx + 2]),
+                                             int(output_ptr[x_idx]),
                                              colors[pt_idx][0],
                                              colors[pt_idx][1],
                                              colors[pt_idx][2]);

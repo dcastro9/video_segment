@@ -183,9 +183,9 @@ int main(int argc, char** argv) {
       color_distance = -1;
       color_idx = -1;
       for (int pt_idx = 0; pt_idx < colors.size(); pt_idx++) {
-        float calc_distance = rgb_distance(int(output_ptr[x_idx]),
+        float calc_distance = rgb_distance(int(output_ptr[x_idx + 2]),
                                            int(output_ptr[x_idx + 1]),
-                                           int(output_ptr[x_idx + 2]),
+                                           int(output_ptr[x_idx]),
                                            colors[pt_idx][0],
                                            colors[pt_idx][1],
                                            colors[pt_idx][2]);
@@ -199,8 +199,8 @@ int main(int argc, char** argv) {
         }
       }
       // Output actual pixel, and chosen color.
-      output_stream << output_ptr[x_idx] << "," << output_ptr[x_idx + 1] << ", "
-                    << output_ptr[x_idx + 2] << "," << colors[color_idx][0] << ", "
+      output_stream << int(output_ptr[x_idx]) << "," << int(output_ptr[x_idx + 1]) << ", "
+                    << int(output_ptr[x_idx + 2]) << "," << colors[color_idx][0] << ", "
                     << colors[color_idx][1] << ", " << colors[color_idx][2] << ", " << std::endl;
     }
   } // Finish image iteration.
