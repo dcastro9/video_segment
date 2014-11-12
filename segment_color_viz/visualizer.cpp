@@ -34,7 +34,6 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/imgcodecs/imgcodecs.hpp>
 
 DEFINE_string(input_frame, "", "The input image REQUIRED");
 DEFINE_bool(logging, false, "If set output various logging information.");
