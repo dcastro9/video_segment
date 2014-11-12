@@ -164,8 +164,11 @@ int main(int argc, char** argv) {
   cv::Mat image_frame;
   image_frame = cv::imread(img_filename, 1);
 
-  int frame_width = image_frame.cols;
-  int frame_height = image_frame.rows;
+  cv::Mat resized_frame;
+  cv::resize(image_frame, resized_frame, cv::Size(), 0.1, 0.1); 
+
+  int frame_width = resized_frame.cols;
+  int frame_height = resized_frame.rows;
 
   // Output file.
   std::string curr_file = FLAGS_output_file;
@@ -176,7 +179,7 @@ int main(int argc, char** argv) {
   float color_distance;
   int color_idx;
   for (int y_idx = 0; y_idx < frame_height; y_idx++) {
-    output_ptr = image_frame.ptr<uchar>(y_idx);
+    output_ptr = resized_frame.ptr<uchar>(y_idx);
     for (int x_idx = 0; x_idx < 3 * frame_width; x_idx += 3) {
       // Find color bin.
       color_distance = -1;
@@ -198,8 +201,8 @@ int main(int argc, char** argv) {
         }
       }
       // Output actual pixel, and chosen color.
-      output_stream << int(output_ptr[x_idx]) << "," << int(output_ptr[x_idx + 1]) << ", "
-                    << int(output_ptr[x_idx + 2]) << "," << colors[color_idx][0] << ", "
+      output_stream << int(output_ptr[x_idx + 2]) << "," << int(output_ptr[x_idx + 1]) << ", "
+                    << int(output_ptr[x_idx]) << "," << colors[color_idx][0] << ", "
                     << colors[color_idx][1] << ", " << colors[color_idx][2] << ", " << std::endl;
     }
   } // Finish image iteration.
