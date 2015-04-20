@@ -196,6 +196,9 @@ int main(int argc, char** argv) {
     frame_width = resized_frame.cols;
     frame_height = resized_frame.rows;
 
+    LOG(INFO) << "Resized Frame Width: " << frame_width;
+    LOG(INFO) << "Resized Frame Height: " << frame_height;
+
     // Create bins.
     std::unordered_map<int, ColorBin> bins;
     for (int pt_idx = 0; pt_idx < colors.size(); pt_idx++) {
@@ -246,6 +249,9 @@ int main(int argc, char** argv) {
                 << float(bin.second.num_points) / 
                    float(frame_width * frame_height)
                 << std::endl;
+
+      LOG(INFO) << "Bin Score: " << (bin.second.radius * bin.second.weight) /
+                                    float(frame_width * frame_height)
       // This looks weird because num_points ends up cancelling itself out.
       // Explanation:
       // sum( (d_sum / num_points) * weight * (num_points) / (total_points)
