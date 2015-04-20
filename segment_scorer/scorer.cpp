@@ -219,6 +219,8 @@ int main(int argc, char** argv) {
                 << std::endl;
     }
 
+    int num_pixels = 0;
+
     // Iterate through regions in the current frame.
     for (const auto& region : segmentation.region()) {
       // Get id of the correct hierarchy level.
@@ -256,12 +258,15 @@ int main(int argc, char** argv) {
           (*avg_colors)[1] += int(output_ptr[j + 1]);
           (*avg_colors)[0] += int(output_ptr[j + 2]);
           size++;
+          num_pixels++;
         }
       }
 
+      // If you don't find the region id, create it.
       if (segment_sizes.find(region_id) == segment_sizes.end()) {
         segment_sizes[region_id] = size;
       } else {
+        // Otherwise add on to the size of that segment id.
         segment_sizes[region_id] += size;
       }
     }
@@ -330,7 +335,7 @@ int main(int argc, char** argv) {
       }
 
       // segment.second stores the size.
-      score += segment.second * color_weights[colors[color_idx]] / distance;
+      score += (segment.second / float(num_pixels)) * color_weights[colors[color_idx]] / distance;
     }
     score /= segment_sizes.size();
 
