@@ -298,8 +298,8 @@ int main(int argc, char** argv) {
     }
 
     LOG(INFO) << "Number of pixels: " << num_pixels;
-    LOG(INFO) << "Rule of Thirds Point: " << rot_points[third_index][0] << ", "
-              << rot_points[third_index][1];
+    LOG(INFO) << "Rule of Thirds Point: " << rot_points[thirds_index][0] << ", "
+              << rot_points[thirds_index][1];
     LOG(INFO) << "Adding up score."
     // After iterating through the segments, we divide the summed color by the size of the
     // segments to get the average color.
