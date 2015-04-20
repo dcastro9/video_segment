@@ -200,7 +200,7 @@ int main(int argc, char** argv) {
                                     bottom_left, bottom_right};
 
     // Compute the maximal distance.
-    float max_dist = dist2D(0, 0, top_left[0], top_left[1])
+    float max_dist = dist2D(0, 0, top_left[0], top_left[1]);
     
     // Get video.
     cv::Mat current_frame(frame_width, frame_height, CV_8UC3);
@@ -411,4 +411,5 @@ int main(int argc, char** argv) {
   segment_reader.CloseFile();
   return 0;
 }
+
 
