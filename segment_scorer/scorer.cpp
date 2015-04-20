@@ -297,6 +297,8 @@ int main(int argc, char** argv) {
       }
     }
 
+    LOG(INFO) << "Number of pixels: " << num_pixels;
+
     // After iterating through the segments, we divide the summed color by the size of the
     // segments to get the average color.
     float score = 0;
