@@ -328,8 +328,8 @@ int main(int argc, char** argv) {
       float color_distance = -1;
       int color_idx = -1;
       for (int pt_idx = 0; pt_idx < colors.size(); pt_idx++) {
-        LOG(INFO) << "Comparing to " << colors[color_idx][0] << ", "
-                  << colors[color_idx][1] << ", " << colors[color_idx][2];
+        LOG(INFO) << "Comparing to " << colors[pt_idx][0] << ", "
+                  << colors[pt_idx][1] << ", " << colors[pt_idx][2];
         float calc_distance = rgb_distance((*avg_colors)[0], (*avg_colors)[1], (*avg_colors)[2],
                                            colors[pt_idx][0], colors[pt_idx][1], colors[pt_idx][2]);
         LOG(INFO) << "Calculated distance: " << calc_distance;
