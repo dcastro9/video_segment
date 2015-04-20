@@ -304,6 +304,8 @@ int main(int argc, char** argv) {
     // segments to get the average color.
     float score = 0;
     for (const auto& segment : segment_sizes) {
+      LOG(INFO) << "##########################################################";
+      LOG(INFO) << " ";
       LOG(INFO) << "Current segment size: " << segment.second;
       std::vector<int>* avg_colors = &segment_avg_color[segment.first];
       std::vector<int>* bounding_box = &segment_bounding_box[segment.first];
@@ -356,6 +358,8 @@ int main(int argc, char** argv) {
       // segment.second stores the size.
       score += (segment.second / float(num_pixels)) * color_weights[colors[color_idx]] / distance;
       LOG(INFO) << "Current score: " << score;
+      LOG(INFO) << " ";
+      LOG(INFO) << "##########################################################";
     }
     LOG(INFO) << "Final score for all segments: " << score;
     score /= segment_sizes.size();
