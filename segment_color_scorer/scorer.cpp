@@ -243,15 +243,18 @@ int main(int argc, char** argv) {
     float score = 0;
     // Calculate the score based on color bins.
     for (auto& bin : bins) {
-      LOG(INFO) << "Bin: " << bin.first << " Radius: " << bin.second.radius 
-                << " Weight: " << bin.second.weight << " Points: "
-                << bin.second.num_points << " Scale: "
-                << float(bin.second.num_points) / 
-                   float(frame_width * frame_height)
-                << std::endl;
-
+      LOG(INFO) << "##########################################################";
+      LOG(INFO) << " ";
+      LOG(INFO) << "Bin: " << bin.first;
+      LOG(INFO) << " Radius: " << bin.second.radius;
+      LOG(INFO) << " Weight: " << bin.second.weight;
+      LOG(INFO) << " Points: " << bin.second.num_points;
+      LOG(INFO) << " Scale: " << float(bin.second.num_points) / 
+                                 float(frame_width * frame_height)
       LOG(INFO) << "Bin Score: " << (bin.second.radius * bin.second.weight) /
                                     float(frame_width * frame_height);
+      LOG(INFO) << " ";
+      LOG(INFO) << "##########################################################";
       // This looks weird because num_points ends up cancelling itself out.
       // Explanation:
       // sum( (d_sum / num_points) * weight * (num_points) / (total_points)
