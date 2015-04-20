@@ -246,11 +246,13 @@ int main(int argc, char** argv) {
       LOG(INFO) << "##########################################################";
       LOG(INFO) << " ";
       LOG(INFO) << "Bin: " << bin.first;
-      LOG(INFO) << " Radius: " << bin.second.radius;
-      LOG(INFO) << " Weight: " << bin.second.weight;
-      LOG(INFO) << " Points: " << bin.second.num_points;
-      LOG(INFO) << " Scale: " << float(bin.second.num_points) / 
+      LOG(INFO) << "  Radius: " << bin.second.radius;
+      LOG(INFO) << "  Weight: " << bin.second.weight;
+      LOG(INFO) << "  Points: " << bin.second.num_points;
+      LOG(INFO) << "  Scale: " << float(bin.second.num_points) / 
                                  float(frame_width * frame_height);
+      LOG(INFO) << "  Radius Scale: " << float(bin.second.radius) / 
+                                         float(frame_width * frame_height);
       LOG(INFO) << "Bin Score: " << (bin.second.radius * bin.second.weight) /
                                     float(frame_width * frame_height);
       LOG(INFO) << " ";
