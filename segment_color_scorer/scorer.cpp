@@ -251,7 +251,7 @@ int main(int argc, char** argv) {
                 << std::endl;
 
       LOG(INFO) << "Bin Score: " << (bin.second.radius * bin.second.weight) /
-                                    float(frame_width * frame_height)
+                                    float(frame_width * frame_height);
       // This looks weird because num_points ends up cancelling itself out.
       // Explanation:
       // sum( (d_sum / num_points) * weight * (num_points) / (total_points)
