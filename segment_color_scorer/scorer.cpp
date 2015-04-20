@@ -156,8 +156,7 @@ int main(int argc, char** argv) {
   std::vector<int*> colors = {white, yellow, yellow_green, green, blue_green, blue, violet, red,
                               orange, magenta, cyan, black};
 
-  int frame_width = 1920;
-  int frame_height = 1080;
+
 
   // Input video filename
   std::string vid_filename = FLAGS_input_video;
@@ -168,6 +167,12 @@ int main(int argc, char** argv) {
     std::cout << "Video file " << vid_filename << " cannot be opened." << std::endl;
     return -1;
   }
+
+  LOG(INFO) << "Frame Width: " << capture.get(3);
+  LOG(INFO) << "Frame Height: " << capture.get(4);
+
+  int frame_width = capture.get(3);
+  int frame_height = capture.get(4);
 
   std::unordered_map<int, float> scores;
 

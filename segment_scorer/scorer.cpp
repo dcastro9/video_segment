@@ -329,7 +329,7 @@ int main(int argc, char** argv) {
 
       // Account for a perfectly composed rule of thirds image.
       if (distance < 1e-5) {
-        distance = 1e-5;
+        distance = 1;
       }
 
       LOG(INFO) << "Distance from chosen rule of thirds: " << distance;
