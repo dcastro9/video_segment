@@ -327,6 +327,11 @@ int main(int argc, char** argv) {
                               rot_points[thirds_index][0],
                               rot_points[thirds_index][1]);
 
+      // Account for a perfectly composed rule of thirds image.
+      if (distance < 1e-5) {
+        distance = 1e-5;
+      }
+
       LOG(INFO) << "Distance from chosen rule of thirds: " << distance;
 
       LOG(INFO) << "Average color: " << (*avg_colors)[0] << ", "
