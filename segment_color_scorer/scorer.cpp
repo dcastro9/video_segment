@@ -250,7 +250,7 @@ int main(int argc, char** argv) {
       LOG(INFO) << " Weight: " << bin.second.weight;
       LOG(INFO) << " Points: " << bin.second.num_points;
       LOG(INFO) << " Scale: " << float(bin.second.num_points) / 
-                                 float(frame_width * frame_height)
+                                 float(frame_width * frame_height);
       LOG(INFO) << "Bin Score: " << (bin.second.radius * bin.second.weight) /
                                     float(frame_width * frame_height);
       LOG(INFO) << " ";
