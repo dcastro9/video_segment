@@ -54,7 +54,9 @@ float dist2D(float dX0, float dY0, float dX1, float dY1) {
 }
 
 float dist3D(float dX0, float dY0, float dZ0, float dX1, float dY1, float dZ1) {
-    return sqrt((dX1 - dX0)*(dX1 - dX0) + (dY1 - dY0)*(dY1 - dY0) + (dZ1 - dZ0)*(dZ1 - dZ0));
+    return sqrt((dX1 - dX0)*(dX1 - dX0) +
+                (dY1 - dY0)*(dY1 - dY0) +
+                (dZ1 - dZ0)*(dZ1 - dZ0));
 }
 
 // Assumes point is three dimensional, from [0,1].
@@ -100,7 +102,8 @@ float rgb_distance(int r1, int g1, int b1, int r2, int g2, int b2) {
   rgb_to_lab(p1, &p1_lab);
   rgb_to_lab(p2, &p2_lab);
 
-  return dist3D(p1_lab[0], p1_lab[1], p1_lab[2], p2_lab[0], p2_lab[1], p2_lab[2]);
+  return dist3D(p1_lab[0], p1_lab[1], p1_lab[2],
+                p2_lab[0], p2_lab[1], p2_lab[2]);
 }
 
 int main(int argc, char** argv) {
@@ -149,8 +152,8 @@ int main(int argc, char** argv) {
   color_weights[cyan] = 4;
   color_weights[black] = 1;
 
-  std::vector<int*> colors = {white, yellow, yellow_green, green, blue_green, blue, violet, red,
-                              orange, magenta, cyan, black};
+  std::vector<int*> colors = {white, yellow, yellow_green, green, blue_green,
+                              blue, violet, red, orange, magenta, cyan, black};
 
   // Input segmentation filename
   std::string seg_filename = FLAGS_input_segmentation;
@@ -193,7 +196,11 @@ int main(int argc, char** argv) {
     int top_right[] = {2 * frame_width / 3, frame_height / 3};
     int bottom_left[] = {frame_width / 3, 2 * frame_height / 3};
     int bottom_right[] = {2 * frame_width / 3, 2 * frame_height / 3};
-    std::vector<int*> rot_points = {top_left, top_right, bottom_left, bottom_right};
+    std::vector<int*> rot_points = {top_left, top_right,
+                                    bottom_left, bottom_right};
+
+    // Compute the maximal distance.
+    float max_dist = dist2D(0, 0, top_left[0], top_left[1])
     
     // Get video.
     cv::Mat current_frame(frame_width, frame_height, CV_8UC3);
@@ -211,8 +218,8 @@ int main(int argc, char** argv) {
 
       // Convert fractional to constant absolute level.
       absolute_level = FLAGS_hierarchy_level * (float)hierarchy.size();
-      LOG(INFO) << "Selecting level " << absolute_level << " of " << hierarchy.size()
-                << std::endl;
+      LOG(INFO) << "Selecting level " << absolute_level << " of "
+                << hierarchy.size() << std::endl;
     }
 
     int num_pixels = 0;
@@ -296,8 +303,8 @@ int main(int argc, char** argv) {
     LOG(INFO) << "Number of pixels: " << num_pixels;
     LOG(INFO) << "Rule of Thirds Point: " << rot_points[thirds_index][0] << ", "
               << rot_points[thirds_index][1];
-    // After iterating through the segments, we divide the summed color by the size of the
-    // segments to get the average color.
+    // After iterating through the segments, we divide the summed color by the
+    // size of the segments to get the average color.
     float score = 0;
     for (const auto& segment : segment_sizes) {
       LOG(INFO) << "##########################################################";
@@ -330,8 +337,12 @@ int main(int argc, char** argv) {
       for (int pt_idx = 0; pt_idx < colors.size(); pt_idx++) {
         LOG(INFO) << "Comparing to " << colors[pt_idx][0] << ", "
                   << colors[pt_idx][1] << ", " << colors[pt_idx][2];
-        float calc_distance = rgb_distance((*avg_colors)[0], (*avg_colors)[1], (*avg_colors)[2],
-                                           colors[pt_idx][0], colors[pt_idx][1], colors[pt_idx][2]);
+        float calc_distance = rgb_distance((*avg_colors)[0],
+                                           (*avg_colors)[1],
+                                           (*avg_colors)[2],
+                                           colors[pt_idx][0],
+                                           colors[pt_idx][1],
+                                           colors[pt_idx][2]);
         LOG(INFO) << "Calculated distance: " << calc_distance;
         if (color_distance == -1) {
           color_distance = calc_distance;
@@ -344,19 +355,23 @@ int main(int argc, char** argv) {
       }
 
       
-      LOG(INFO) << "Closest color: " << colors[color_idx][0] << ", " << colors[color_idx][1]
-                << ", " << colors[color_idx][2];
+      LOG(INFO) << "Closest color: " << colors[color_idx][0] << ", "
+                << colors[color_idx][1] << ", " << colors[color_idx][2];
       LOG(INFO) << "Color weight: " << color_weights[colors[color_idx]];
 
-      LOG(INFO) << "Score for this segment: (" << segment.second << "/" << num_pixels
-                << ") * " << color_weights[colors[color_idx]] << "/" << distance;
-      LOG(INFO) << "Score for this segment: (" << (segment.second / float(num_pixels))
-                << ") * " << color_weights[colors[color_idx]] / distance;
-      LOG(INFO) << "Score for this segment: " << (segment.second / float(num_pixels))
-                * color_weights[colors[color_idx]] / distance;
+      LOG(INFO) << "Score for this segment: (" << segment.second << "/"
+                << num_pixels << ") * " << color_weights[colors[color_idx]]
+                << "/" << distance;
+      LOG(INFO) << "Score for this segment: ("
+                << (segment.second / float(num_pixels)) << ") * "
+                << color_weights[colors[color_idx]] / distance;
+      LOG(INFO) << "Score for this segment: "
+                << (segment.second / float(num_pixels))
+                   * color_weights[colors[color_idx]] / distance;
 
       // segment.second stores the size.
-      score += (segment.second / float(num_pixels)) * color_weights[colors[color_idx]] / distance;
+      score += (segment.second / float(num_pixels)) *
+               color_weights[colors[color_idx]] / (distance / max_dist);
       LOG(INFO) << "Current score: " << score;
       LOG(INFO) << " ";
       LOG(INFO) << "##########################################################";
