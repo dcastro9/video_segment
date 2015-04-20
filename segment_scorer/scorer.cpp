@@ -322,12 +322,17 @@ int main(int argc, char** argv) {
 
       LOG(INFO) << "Distance from chosen rule of thirds: " << distance;
 
+      LOG(INFO) << "Average color: " << (*avg_colors)[0] << ", "
+                << (*avg_colors)[1] << "," << (*avg_colors)[2];
       // Iterate through colors to find closest color.
       float color_distance = -1;
       int color_idx = -1;
       for (int pt_idx = 0; pt_idx < colors.size(); pt_idx++) {
+        LOG(INFO) << "Comparing to " << colors[color_idx][0] << ", "
+                  << colors[color_idx][1] << ", " << colors[color_idx][2];
         float calc_distance = rgb_distance((*avg_colors)[0], (*avg_colors)[1], (*avg_colors)[2],
                                            colors[pt_idx][0], colors[pt_idx][1], colors[pt_idx][2]);
+        LOG(INFO) << "Calculated distance: " << calc_distance;
         if (color_distance == -1) {
           color_distance = calc_distance;
           color_idx = pt_idx;
@@ -338,8 +343,7 @@ int main(int argc, char** argv) {
         }
       }
 
-      LOG(INFO) << "Average color: " << (*avg_colors)[0] << ", " << (*avg_colors)[1]
-                << "," << (*avg_colors)[2];
+      
       LOG(INFO) << "Closest color: " << colors[color_idx][0] << ", " << colors[color_idx][1]
                 << ", " << colors[color_idx][2];
       LOG(INFO) << "Color weight: " << color_weights[colors[color_idx]];
