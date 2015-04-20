@@ -241,15 +241,20 @@ int main(int argc, char** argv) {
     // Calculate the score based on color bins.
     for (auto& bin : bins) {
       LOG(INFO) << "Bin: " << bin.first << " Radius: " << bin.second.radius 
-                << " Weight: " << bin.second.weight << " Points: " << bin.second.num_points
-                << "Scale: " << float(bin.second.num_points) / float(frame_width * frame_height)
+                << " Weight: " << bin.second.weight << " Points: "
+                << bin.second.num_points << " Scale: "
+                << float(bin.second.num_points) / 
+                   float(frame_width * frame_height)
                 << std::endl;
-      // This looks weird because num_points ends up cancelling itself out. Explanation:
+      // This looks weird because num_points ends up cancelling itself out.
+      // Explanation:
       // sum( (d_sum / num_points) * weight * (num_points) / (total_points)
       // d_sum / num_points is the average radius. 
       // num_points / total_points is the scale based on pixel points.
-      // Final formula looks simpler for that reason: d_sum * weight / total_points.
-      score += (bin.second.radius * bin.second.weight) / float(frame_width * frame_height);
+      // Final formula looks simpler for that reason:
+      //        d_sum * weight / total_points.
+      score += (bin.second.radius * bin.second.weight) /
+               float(frame_width * frame_height);
     }
     LOG(INFO) << "Total points: " << frame_width * frame_height;
     LOG(INFO) << "Total score: " << score;
