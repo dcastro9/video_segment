@@ -298,11 +298,14 @@ int main(int argc, char** argv) {
     }
 
     LOG(INFO) << "Number of pixels: " << num_pixels;
-
+    LOG(INFO) << "Rule of Thirds Point: " << rot_points[third_index][0] << ", "
+              << rot_points[third_index][1];
+    LOG(INFO) << "Adding up score."
     // After iterating through the segments, we divide the summed color by the size of the
     // segments to get the average color.
     float score = 0;
     for (const auto& segment : segment_sizes) {
+      LOG(INFO) << "Current segment size: " << segment.second;
       std::vector<int>* avg_colors = &segment_avg_color[segment.first];
       std::vector<int>* bounding_box = &segment_bounding_box[segment.first];
       int center_x = (*bounding_box)[1] - (*bounding_box)[0];
@@ -320,6 +323,8 @@ int main(int argc, char** argv) {
                               rot_points[thirds_index][0],
                               rot_points[thirds_index][1]);
 
+      LOG(INFO) << "Distance from chosen rule of thirds: " << distance;
+
       // Iterate through colors to find closest color.
       float color_distance = -1;
       int color_idx = -1;
@@ -335,6 +340,15 @@ int main(int argc, char** argv) {
           color_idx = pt_idx;
         }
       }
+
+      LOG(INFO) << "Average color: " << avg_colors[0] << ", " << avg_colors[1]
+                << "," << avg_colors[2];
+      LOG(INFO) << "Closest color: " << colors[color_idx][0] << ", " << colors[color_idx][1]
+                << ", " << colors[color_idx][2];
+      LOG(INFO) << "Color weight: " << color_weights[colors[color_idx]];
+
+      LOG(INFO) << "Score for this segment: (" << segment.second << "/" << num_pixels
+                << ") * " << color_weights[colors[color_idx]] << "/" << distance;
 
       // segment.second stores the size.
       score += (segment.second / float(num_pixels)) * color_weights[colors[color_idx]] / distance;
