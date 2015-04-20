@@ -300,7 +300,6 @@ int main(int argc, char** argv) {
     LOG(INFO) << "Number of pixels: " << num_pixels;
     LOG(INFO) << "Rule of Thirds Point: " << rot_points[thirds_index][0] << ", "
               << rot_points[thirds_index][1];
-    LOG(INFO) << "Adding up score."
     // After iterating through the segments, we divide the summed color by the size of the
     // segments to get the average color.
     float score = 0;
@@ -341,19 +340,28 @@ int main(int argc, char** argv) {
         }
       }
 
-      LOG(INFO) << "Average color: " << avg_colors[0] << ", " << avg_colors[1]
-                << "," << avg_colors[2];
+      LOG(INFO) << "Average color: " << (*avg_colors)[0] << ", " << (*avg_colors)[1]
+                << "," << (*avg_colors)[2];
       LOG(INFO) << "Closest color: " << colors[color_idx][0] << ", " << colors[color_idx][1]
                 << ", " << colors[color_idx][2];
       LOG(INFO) << "Color weight: " << color_weights[colors[color_idx]];
 
       LOG(INFO) << "Score for this segment: (" << segment.second << "/" << num_pixels
                 << ") * " << color_weights[colors[color_idx]] << "/" << distance;
+      LOG(INFO) << "Score for this segment: (" << (segment.second / float(num_pixels))
+                << ") * " << color_weights[colors[color_idx]] / distance;
+      LOG(INFO) << "Score for this segment: " << (segment.second / float(num_pixels))
+                * color_weights[colors[color_idx]] / distance;
 
       // segment.second stores the size.
       score += (segment.second / float(num_pixels)) * color_weights[colors[color_idx]] / distance;
+      LOG(INFO) << "Current score: " << score;
     }
+    LOG(INFO) << "Final score for all segments: " << score;
     score /= segment_sizes.size();
+    LOG(INFO) << "Score weighted based on number of segments: " << score;
+
+
 
     if (min_score == -1 || score < min_score) {
       min_score = score;
