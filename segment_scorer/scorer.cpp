@@ -152,15 +152,6 @@ int main(int argc, char** argv) {
   std::vector<int*> colors = {white, yellow, yellow_green, green, blue_green, blue, violet, red,
                               orange, magenta, cyan, black};
 
-  int frame_width = 1920;
-  int frame_height = 1080;
-  int top_left[] = {frame_width / 3, frame_height / 3};
-  int top_right[] = {2 * frame_width / 3, frame_height / 3};
-  int bottom_left[] = {frame_width / 3, 2 * frame_height / 3};
-  int bottom_right[] = {2 * frame_width / 3, 2 * frame_height / 3};
-  std::vector<int*> rot_points = {top_left, top_right, bottom_left, bottom_right};
-
-
   // Input segmentation filename
   std::string seg_filename = FLAGS_input_segmentation;
   std::string vid_filename = FLAGS_input_video;
@@ -196,8 +187,13 @@ int main(int argc, char** argv) {
     segment_reader.SeekToFrame(frame_idx);
 
     // Get frame width & height. This should be outside for loop for optimization.
-    frame_width = segmentation.frame_width();
-    frame_height = segmentation.frame_height();
+    int frame_width = segmentation.frame_width();
+    int frame_height = segmentation.frame_height();
+    int top_left[] = {frame_width / 3, frame_height / 3};
+    int top_right[] = {2 * frame_width / 3, frame_height / 3};
+    int bottom_left[] = {frame_width / 3, 2 * frame_height / 3};
+    int bottom_right[] = {2 * frame_width / 3, 2 * frame_height / 3};
+    std::vector<int*> rot_points = {top_left, top_right, bottom_left, bottom_right};
     
     // Get video.
     cv::Mat current_frame(frame_width, frame_height, CV_8UC3);
